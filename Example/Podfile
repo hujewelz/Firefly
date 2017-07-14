@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Firefly_Example' do
+  pod 'Firefly', :path => '../'
+
+  target 'Firefly_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
