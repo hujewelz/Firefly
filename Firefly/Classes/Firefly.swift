@@ -127,11 +127,11 @@ public struct Response<Value> {
     
 }
 
-public enum Result<Value: Any> {
-    case success(Any)
+public enum Result<Value> {
+    case success(Value)
     case failure(Error)
     
-    public var value: Any? {
+    public var value: Value? {
         switch self {
         case .success(let value):
             return value
