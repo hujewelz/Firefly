@@ -1,0 +1,6 @@
+framework module Firefly {
+  umbrella header "Firefly-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -7,18 +7,47 @@
 //
 
 import UIKit
+import Firefly
+
+class UserProdiver: Provider<User> {
+    
+}
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        test()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func test() {
+        
+//        Provider<User>().request(.users).JSONData { (response) in
+//            guard let json = response.result.value else {
+//                // show error UI
+//                return
+//            }
+//
+//            print(json)
+//        }
+        
+        Provider<User>(.users).JSONData { (response) in
+            
+        }
+        
+//        UserProdiver(.users).JSONData { (response) in
+//            
+//        }.cancel()
     }
 
 }
 
+enum User: TargetType {
+    case users
+    
+   // var baseURL: URL { return URL(string: "http://www.baidu.com")! }
+    
+    var path: String { return "/users" }
+}

@@ -1,0 +1,20 @@
+PODS:
+  - Alamofire (4.5.0)
+  - Firefly (0.1.0):
+    - Alamofire (~> 4.5.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - Firefly (from `../`)
+
+EXTERNAL SOURCES:
+  Firefly:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
+  Firefly: 50dd88816e74725a8202b7fc46e6436427fcb31e
+
+PODFILE CHECKSUM: 836e49bda52e088c1111c608bdc87402d4ebef31
+
+COCOAPODS: 1.2.1

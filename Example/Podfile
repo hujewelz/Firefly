@@ -1,8 +1,10 @@
 use_frameworks!
 
 target 'Firefly_Example' do
+  platform :ios, '8.0'
   pod 'Firefly', :path => '../'
-
+  pod 'Alamofire'
+  
   target 'Firefly_Tests' do
     inherit! :search_paths
 
