@@ -18,6 +18,8 @@ open class Provider<T: TargetType> {
     
     private var params: Firefly.Parameters?
     
+    private var validateStatasCodeRange: Range<Int>?
+    
     
     public init() {}
     
@@ -83,15 +85,29 @@ open class Provider<T: TargetType> {
         request!.responseJSON(completionHandler: { (response) in
             let statusCode = response.response?.statusCode ?? -1
             
+            
+            if let validateStatasCodeRange = self.validateStatasCodeRange, validateStatasCodeRange ~= statusCode {
+                return
+            }
+            
+            FireflyServer.shared.beforeResponseClosure?(statusCode)
+            
+            
+            if FireflyServer.shared.enableLog {
+                Logger.logDebug(with: response, data: response.value)
+            }
+            
             guard let value = response.result.value, let json = value as? [String: Any] else {
                 
                 let res = Response<[String: Any]>(result: Result.failure(response.error!), status: statusCode)
+                
                 handler(res)
                 
                 return
             }
             
             let res = Response<[String: Any]>(result: Result.success(json), status: statusCode)
+            
             handler(res)
     
         })
@@ -100,8 +116,8 @@ open class Provider<T: TargetType> {
     }
     
     @discardableResult
-    public func validate() -> Self {
-        
+    public func validate(statasCode: Range<Int>) -> Self {
+        validateStatasCodeRange = statasCode
         return self
     }
     
@@ -118,13 +134,33 @@ public struct Response<Value> {
     
     public let status: Status
     
-    public var error: Error?
+    public var value: Value? {
+        return result.value
+    }
+    
+    public var error: Error? {
+        return result.error
+    }
+    
     
     init(result: Result<Value>, status: Status) {
         self.result = result
         self.status = status
     }
     
+}
+
+extension Response {
+    
+    public func map<T>(_ transform: (Value) -> T) -> Firefly.Response<T> {
+        
+        guard let value = value else {
+            return Response<T>(result: .failure(error!), status: status)
+        }
+        
+        return Response<T>(result: .success(transform(value)), status: status)
+        
+    }
 }
 
 public enum Result<Value> {
@@ -137,6 +173,15 @@ public enum Result<Value> {
             return value
         case .failure:
             return nil
+        }
+    }
+    
+    public var error: Error? {
+        switch self {
+        case .success:
+            return nil
+        case .failure(let error):
+            return error
         }
     }
 }

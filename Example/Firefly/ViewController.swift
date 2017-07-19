@@ -9,7 +9,7 @@
 import UIKit
 import Firefly
 
-class UserProdiver: Provider<User> {
+class UserProdiver: Provider<UserApi> {
     
 }
 
@@ -17,37 +17,38 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         test()
     }
     
     func test() {
         
-//        Provider<User>().request(.users).JSONData { (response) in
-//            guard let json = response.result.value else {
-//                // show error UI
-//                return
-//            }
-//
-//            print(json)
-//        }
-        
-        Provider<User>(.users).JSONData { (response) in
+        Provider<UserApi>(.users).JSONData { (response) in
+            let res = response.map{ User($0["data"] as! [String : Any]) }
+            guard let user = res.value else {
+                return
+            }
             
+            print(user)
         }
         
-//        UserProdiver(.users).JSONData { (response) in
-//            
-//        }.cancel()
     }
 
 }
 
-enum User: TargetType {
+enum UserApi: TargetType {
     case users
-    
-   // var baseURL: URL { return URL(string: "http://www.baidu.com")! }
-    
+   
     var path: String { return "/users" }
+}
+
+struct User {
+    var name: String = ""
+    
+    init(_ json: [String: Any]) {
+        guard let name = json["name"] as? String else {
+            return
+        }
+        self.name = name
+    }
 }

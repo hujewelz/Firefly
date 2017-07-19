@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        FireflyServer.setBaseURL(URL(string: "http://www.baidu.com")!, for: .development)
+        FireflyServer.setBaseURL(URL(string: "http://192.168.6.114:3000")!, for: .development)
         FireflyServer.setCurrentEnvironment(.development)
         FireflyServer.enableLog(true)
         

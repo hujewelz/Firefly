@@ -30,10 +30,14 @@ public final class FireflyServer {
         return isLogEnable
     }
     
+    internal var beforeResponseClosure: ((Int) -> Void)?
+    
     private var isLogEnable = true
     
     private var currentEnvironment: FireflyServer.Environment = .development
     private var urlMap: [String: URL] = [:]
+    
+    // MARK: class Func
     
     public class func setCurrentEnvironment(_ env: FireflyServer.Environment) {
         FireflyServer.shared.currentEnvironment = env
@@ -47,5 +51,11 @@ public final class FireflyServer {
     
     public class func enableLog(_ able: Bool) {
         FireflyServer.shared.isLogEnable = able
+    }
+    
+    // MARK: instance Func
+    
+    public func beforeResponse(_ closure: @escaping (Int) -> Void) {
+        beforeResponseClosure = closure
     }
 }
